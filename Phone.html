@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phone</title>
+</head>
+<body>
+<p align="center" id="p"></p>
+<script>
+    // Xây dựng lớp phone
+    let phone = function (battery, name, phoneNumber) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.battery = battery;
+        this.status = false;
+        this.message = "";
+        this.inbox = [];
+        this.outbox = [];
+
+        // Phần message
+        this.soanMes = function (string) {
+            if (this.statuschecker()) {
+                this.message = string;
+                this.batteryUse();
+            }
+        };
+        this.sendMes = function (name) {
+            if (this.statuschecker()) {
+                name.inbox.push(this.message);
+                this.outbox.push(this.message);
+                alert(this.name + "sent");
+                name.alertMes();
+                this.batteryUse();
+            }
+        };
+        this.inboxMes = function () {
+            if (this.statuschecker()) {
+                let writter = "Inbox: <br>";
+                for (let i = 0; i < this.inbox.length; i++) {
+                    writter = writter + (i + 1) + ")" + this.inbox[i] + "." + "<br>";
+                }
+                this.batteryUse();
+                document.getElementById("p").innerHTML = writter;
+            }
+        };
+        this.outboxMes = function () {
+            let writter = "Inbox: <br>";
+            if (this.statuschecker()) {
+                for (let i = 0; i < this.outbox.length; i++) {
+                    writter = writter + "<br>" + i + " " + this.outbox[i];
+                }
+                this.batteryUse();
+                document.getElementById("p").innerHTML = writter;
+            }
+        };
+        // Phần battery
+        this.batteryUse = function () {
+            this.battery = this.battery - 1;
+            if (this.battery < 1) {
+                this.status = false;
+            }
+        };
+        this.charge = function (timebyMin) {
+            if (timebyMin === undefined) {
+                this.battery = 100
+            } else {
+                this.battery = timebyMin / 2;
+            }
+        };
+        // Phần status
+        this.statuschecker = function () {
+            if (this.status === false) {
+                alert("Your phone is off, please turn on your phone");
+                return false;
+            }
+            return true;
+        };
+        this.checkStatus = function () {
+            (this.status) ? alert("Welcome") : alert("Your phone is off");
+            this.batteryUse();
+        };
+        this.turnStatus = function () {
+            if (this.status) {
+                this.status = false;
+                alert("Your phone " + this.name + "is now off");
+            } else {
+                alert("Your phone " + this.name + "is now on");
+            }
+        };
+        // Phần thông báo tin nhắn
+        this.alertMes = function () {
+            alert(this.name + "You have a new message");
+        };
+    };
+
+    // Tạo đối tượng mới
+    let iphone = new phone(100, "iphoneX");
+    let samsung = new phone(100, Note9);
+
+    iphone.turnStatus();
+    iphone.soanMes("Hi guy");
+    iphone.soanMes(samsung);
+
+    samsung.turnStatus();
+    samsung.inboxMes();
+
+</script>
+</body>
+</html>
